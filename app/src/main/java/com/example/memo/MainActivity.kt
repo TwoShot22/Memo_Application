@@ -4,30 +4,45 @@ import android.annotation.SuppressLint
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.memo.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnDeleteListener {
 
-    lateinit var db : MemoDatabase
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var db : MemoDatabase
+
     var memoList: List<MemoEntity> = listOf<MemoEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         db = MemoDatabase.getInstance(this)!!
 
         button_add.setOnClickListener {
             var memo = MemoEntity(null, edittext_memo.text.toString())
             edittext_memo.setText("")
-            insertMemo(memo)
+
+            if(memo.content == "") {
+                Toast.makeText(this, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                insertMemo(memo)
+            }
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         getAllMemos()
+    }
+
+    fun showEmptyView(msg: String? = null) {
+
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -83,7 +98,15 @@ class MainActivity : AppCompatActivity(), OnDeleteListener {
     }
 
     fun setRecyclerView(memoList : List<MemoEntity>) {
-        recyclerView.adapter = MyAdapter(this, memoList, this)
+        if(memoList.isNullOrEmpty()) {
+            binding.recyclerView.visibility = View.GONE
+            binding.emptyView.visibility = View.VISIBLE
+        } else {
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.emptyView.visibility = View.GONE
+
+            recyclerView.adapter = MyAdapter(this, memoList, this)
+        }
     }
 
     override fun onDeleteListener(memo: MemoEntity) {

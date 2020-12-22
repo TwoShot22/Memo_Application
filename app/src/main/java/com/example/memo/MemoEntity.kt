@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class MemoEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long?,
-    var memo: String = ""
+    var content: String = ""
 )

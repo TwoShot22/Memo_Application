@@ -3,4 +3,5 @@
     <string name="edittext_hint">Add Memo</string>
     <string name="button_text">Add</string>
     <string name="item_memo_title">점심 메뉴 고민하기</string>
+    <string name="emptyView_text">No Memo Registered yet :(</string>
 </resources>

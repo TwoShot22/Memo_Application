@@ -18,7 +18,7 @@ class MyAdapter(val context: Context, var list : List<MemoEntity>, var onDeleteL
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val memo = list[position]
 
-        holder.memo.text = memo.memo
+        holder.memo.text = memo.content
         holder.root.setOnLongClickListener {
             onDeleteListener.onDeleteListener(memo)
             true
